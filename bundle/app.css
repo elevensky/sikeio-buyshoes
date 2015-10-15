@@ -465,9 +465,13 @@ body, div, span, a, img, h1, h2, h3, h4, h5 {
 }
 
 body {
-    background: url(img/bg.jpg) repeat-x left bottom #F7F8FA;
-    /*background-color: #FFFFFF;*/
-    color: #202020;
+    /*单独在body里实现透明背景渐变
+    background-attachment: fixed;
+    background-position: 0% 100%;
+    background-repeat: repeat-x;
+    background-image: linear-gradient(to bottom, rgba(247,248,250,1) 0%, rgb(223,225,238) 50%, transparent 100%) ,url(img/bg.jpg);
+    */
+    background: url(img/bg.jpg) fixed repeat-x left bottom #F7F8FA;
     font-family: "Avenir Next", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 100;
 }
@@ -529,6 +533,7 @@ a {
     -webkit-flex: 7 0 0;
         -ms-flex: 7 0 0;
             flex: 7 0 0;
+    /*单独在body实现时可移除[-]*/ background: -webkit-linear-gradient(top, rgba(247,248,250,1) 0%, rgb(223,225,238) 50%, transparent 100%); background: linear-gradient(to bottom, rgba(247,248,250,1) 0%, rgb(223,225,238) 50%, transparent 100%);
 }
     .site__left-sidebar{
         width: 160px;
@@ -573,6 +578,7 @@ a {
     }
     .product__display{
         border: 5px solid #D8D8D8;
+        background-color: #fff;
     }
     .product__price{
         position: absolute;
@@ -625,7 +631,7 @@ a {
                 align-self: flex-start;
     }
 
-.site__right-sidebar{
+.site__right-sidebar {
     -webkit-box-flex: 3;
     -webkit-flex: 3 0 0;
         -ms-flex: 3 0 0;
@@ -642,6 +648,12 @@ a {
     right:0;
     top:0;
     width:30%;
+    -webkit-transition: -webkit-box-flex .5s linear;
+    -webkit-transition: -webkit-flex .5s linear;
+            transition: -webkit-box-flex .5s linear;
+            transition: -ms-flex .5s linear;
+            transition: flex .5s linear;
+    z-index: 99;
 }
 .cart-item {
     margin-bottom: 20px;
@@ -734,8 +746,9 @@ a {
     -webkit-flex-grow: 0;
         -ms-flex-positive: 0;
             flex-grow: 0;
-    padding:0 20px;
-    background: -webkit-linear-gradient(top, rgba(192,207,221,1) 0%, rgba(192,207,221,0) 100%);
+    padding:20px 20px;
+    background: -webkit-linear-gradient(bottom, rgba(196,204,218, 0) 0%, #c4ccda 50%, transparent);
+    background: linear-gradient(to top, rgba(196,204,218, 0) 0%, #c4ccda 50%, transparent);
 }
 .checkout__divider{
     border:0;
@@ -839,7 +852,8 @@ a {
     width: 100%;
     padding-left: 10px;
     height: 40px;
-    background: -webkit-linear-gradient(top, rgba(192,207,221,1) 100%, rgba(192,207,221,0) 0%);
+    background: -webkit-linear-gradient(top, rgba(196,204,218, 1) 0%, rgba(196,204,218, .5) 50%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(196,204,218, 1) 0%, rgba(196,204,218, .5) 50%, transparent 100%);
 }
 .site__content, .cart {
     -webkit-flex-basis: 0;
@@ -852,6 +866,9 @@ a {
 }
 .site__right-sidebar-toggle {
     display: none;
+    position: fixed;
+    bottom: 0;
+    right: 0;
 }
 
 @media (max-width: 950px) {
@@ -909,20 +926,33 @@ a {
         width: 100%;
     }
     .site__right-sidebar{
-        display: none;
+        position: fixed;
+        right: 0;
+        visibility:hidden;
     }
     .site__right-sidebar-toggle {
         -webkit-box-flex: 1;
         -webkit-flex: 1 0;
             -ms-flex: 1 0;
                 flex: 1 0;
-        display: block;
-        -webkit-align-self: flex-end;
-            -ms-flex-item-align: end;
-                align-self: flex-end;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
         background-color: #283148;
         width:40px;
         height: 40px;
+        -webkit-align-self: center;
+            -ms-flex-item-align: center;
+                align-self: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        right:0;
+    }
+    .site__right-sidebar-toggle img{
+        color: #FFF;
     }
     body.js-show-right-sidebar .site__right-sidebar{
         -webkit-box-flex: 0;
@@ -931,6 +961,9 @@ a {
                 flex: 0 0;
         width: 80%;
         z-index: 9;
-        display: block;
+        visibility: visible;
+    }
+    body.js-show-right-sidebar .site__right-sidebar-toggle{
+        right: 80%;
     }
 }
